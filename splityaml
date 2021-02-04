@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+
+import os
+import argparse
+import yaml
+
+
+def handle(filename: str, output_dir: str) -> None:
+    if output_dir[len(output_dir) - 1] == '/':
+        output_dir = output_dir[0:-1]
+
+    if not os.path.exists(output_dir):
+        os.mkdir(output_dir)
+
+    counter = 0
+    for document in get_yaml_documents(filename):
+        with open("{directory}/split-{index}.yml".format(directory=output_dir, index=counter), "w") as new_file:
+            new_file.write(yaml.dump(document))
+        counter += 1
+
+
+def get_yaml_documents(filename: str):
+    with open(filename, 'r') as yaml_file:
+        yaml_content = yaml.safe_load_all(yaml_file)
+        for document in yaml_content:
+            yield document
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Split a yaml file, into all of it\'s counterparts')
+    parser.add_argument('file', metavar='file', type=str, help='file to separate')
+    parser.add_argument('-o', '--output', dest='output', metavar="dir", help='Output directory for the separated files',
+                        default="split_output")
+    args = parser.parse_args()
+
+    handle(args.file, args.output)
