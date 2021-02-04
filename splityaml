@@ -14,6 +14,8 @@ def handle(filename: str, output_dir: str) -> None:
 
     counter = 0
     for document in get_yaml_documents(filename):
+        if document is None:
+            continue
         with open("{directory}/split-{index}.yml".format(directory=output_dir, index=counter), "w") as new_file:
             new_file.write(yaml.dump(document))
         counter += 1

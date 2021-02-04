@@ -21,3 +21,13 @@ pip install -r requirements.txt
 ```bash
 splityaml input.yml -o split/
 ```
+
+### Global usage
+
+To install the script for global usage, you can simply copy it to `usr/local/bin/`
+
+```bash
+cp splityaml /usr/local/bin/
+```
+
+It will now be available as `splityaml` everywhere
