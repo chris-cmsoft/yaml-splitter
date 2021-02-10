@@ -16,10 +16,21 @@ def handle(filename: str, output_dir: str) -> None:
     for document in get_yaml_documents(filename):
         if document is None:
             continue
-        with open("{directory}/split-{index}.yml".format(directory=output_dir, index=counter), "w") as new_file:
+        file_name = "{type}-{name}".format(type=document.get('kind', 'split-').lower(), name=document.get('metadata', {'name': '{count}'.format(count=counter)})["name"])
+        if os.path.exists("{directory}/{filename}.yml".format(directory=output_dir, filename=file_name)):
+            i = 0
+            while True:
+                file_name = "{type}-{name}-{counter}".format(
+                    type=document.get('kind', 'split-').lower(),
+                    name=document.get('metadata', {'name': '{count}'.format(count=counter)})["name"],
+                    counter=i
+                )
+                if not os.path.exists("{directory}/{filename}.yml".format(directory=output_dir, filename=file_name)):
+                    break
+                i += 1
+        with open("{directory}/{filename}.yml".format(directory=output_dir, filename=file_name), "w") as new_file:
             new_file.write(yaml.dump(document))
         counter += 1
-
 
 def get_yaml_documents(filename: str):
     with open(filename, 'r') as yaml_file:

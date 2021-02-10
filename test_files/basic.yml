@@ -5,6 +5,8 @@ metadata:
 ---
 apiVersion: v1
 kind: Deployment
+metadata:
+  name: test-deploy
 spec:
   containers:
     - name: c1
